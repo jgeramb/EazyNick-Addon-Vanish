@@ -1,0 +1,5 @@
+name: EazyNick-Addon-SuperVanish
+version: 1.0.0
+author: Justix
+main: com.justixdev.eazynick.addon.EazyNickAddon
+depend: [EazyNick]
