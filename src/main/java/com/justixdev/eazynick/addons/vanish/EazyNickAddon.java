@@ -1,4 +1,4 @@
-package com.justixdev.eazynick.addon;
+package com.justixdev.eazynick.addons.vanish;
 
 import com.justixdev.eazynick.EazyNick;
 import com.justixdev.eazynick.api.events.PlayerNickEvent;
@@ -15,10 +15,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class EazyNickAddon extends JavaPlugin implements Listener {
 
     private EazyNick eazyNick;
+    private SetupConfiguration setupConfiguration;
 
     @Override
     public void onEnable() {
         this.eazyNick = EazyNick.getInstance();
+        this.setupConfiguration = new SetupConfiguration(getName());
 
         Bukkit.getPluginManager().registerEvents(this, this);
 
@@ -29,7 +31,10 @@ public class EazyNickAddon extends JavaPlugin implements Listener {
                         .stream()
                         .filter(currentPlayer -> currentPlayer.getMetadata("vanished").stream().anyMatch(MetadataValue::asBoolean))
                         .filter(currentPlayer -> !eazyNick.getUtils().getNickedPlayers().containsKey(currentPlayer.getUniqueId()))
-                        .forEach(currentPlayer -> eazyNick.getActionBarUtils().sendActionBar(currentPlayer, "§fYou are currently §cVANISHED"));
+                        .forEach(currentPlayer -> eazyNick.getActionBarUtils().sendActionBar(
+                                currentPlayer,
+                                setupConfiguration.getConfigString("Messages.Vanished")
+                        ));
             }
         }, 1000L, 1000L).run();
     }
@@ -39,6 +44,7 @@ public class EazyNickAddon extends JavaPlugin implements Listener {
         EazyNick eazyNick = EazyNick.getInstance();
         Utils utils = eazyNick.getUtils();
         ActionBarUtils actionBarUtils = eazyNick.getActionBarUtils();
+
         Player player = event.getPlayer();
 
         new AsyncTask(new AsyncTask.AsyncRunnable() {
@@ -48,9 +54,13 @@ public class EazyNickAddon extends JavaPlugin implements Listener {
                         && utils.getNickedPlayers().containsKey(player.getUniqueId())
                         && player.isOnline()
                         && !utils.getWorldsWithDisabledActionBar().contains(player.getWorld().getName().toUpperCase()))
-                    actionBarUtils.sendActionBar(player, "§fYou are currently §cNICKED§f" + (player.getMetadata("vanished").stream().anyMatch(MetadataValue::asBoolean) ? ", §cVANISHED" : ""));
+                    actionBarUtils.sendActionBar(
+                            player,
+                            player.getMetadata("vanished").stream().anyMatch(MetadataValue::asBoolean)
+                                    ? setupConfiguration.getConfigString("Messages.NickedAndVanished")
+                                    : setupConfiguration.getConfigString("Messages.Nicked"));
                 else {
-                    if (player != null)
+                    if (player.isOnline())
                         actionBarUtils.sendActionBar(player, "");
 
                     cancel();
