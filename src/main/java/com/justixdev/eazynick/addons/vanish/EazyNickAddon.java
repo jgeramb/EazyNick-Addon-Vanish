@@ -58,7 +58,8 @@ public class EazyNickAddon extends JavaPlugin implements Listener {
                             player,
                             player.getMetadata("vanished").stream().anyMatch(MetadataValue::asBoolean)
                                     ? setupConfiguration.getConfigString("Messages.NickedAndVanished")
-                                    : setupConfiguration.getConfigString("Messages.Nicked"));
+                                    : setupConfiguration.getConfigString("Messages.Nicked")
+                    );
                 else {
                     if (player.isOnline())
                         actionBarUtils.sendActionBar(player, "");

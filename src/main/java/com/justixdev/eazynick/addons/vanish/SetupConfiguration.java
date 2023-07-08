@@ -6,7 +6,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Objects;
 
 public class SetupConfiguration {
@@ -43,8 +42,6 @@ public class SetupConfiguration {
         this.configuration.addDefault("Messages.Nicked", "&fYou are currently &cNICKED");
         this.configuration.addDefault("Messages.Vanished", "&fYou are currently &cVANISHED");
         this.configuration.addDefault("Messages.NickedAndVanished", "&fYou are currently $cNICKED&f, &cVANISHED");
-
-        this.configuration.options().setHeader(Collections.singletonList("You can edit the action bar messages of the add-on below:"));
         this.configuration.options().copyDefaults(true);
     }
 
