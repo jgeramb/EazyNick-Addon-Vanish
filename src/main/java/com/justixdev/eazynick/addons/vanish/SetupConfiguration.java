@@ -41,8 +41,13 @@ public class SetupConfiguration {
 
         this.configuration.addDefault("Messages.Nicked", "&fYou are currently &cNICKED");
         this.configuration.addDefault("Messages.Vanished", "&fYou are currently &cVANISHED");
-        this.configuration.addDefault("Messages.NickedAndVanished", "&fYou are currently $cNICKED&f, &cVANISHED");
+        this.configuration.addDefault("Messages.NickedAndVanished", "&fYou are currently &cNICKED&f, &cVANISHED");
         this.configuration.options().copyDefaults(true);
+
+        try {
+            this.configuration.save(this.file);
+        } catch (IOException ignore) {
+        }
     }
 
     public String getConfigString(String path) {
