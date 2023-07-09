@@ -8,6 +8,7 @@ import com.justixdev.eazynick.utilities.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -36,10 +37,10 @@ public class EazyNickAddon extends JavaPlugin implements Listener {
                                 setupConfiguration.getConfigString("Messages.Vanished")
                         ));
             }
-        }, 1000L, 1000L).run();
+        }, 0L, 1000L).run();
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerNick(PlayerNickEvent event) {
         EazyNick eazyNick = EazyNick.getInstance();
         Utils utils = eazyNick.getUtils();
@@ -53,21 +54,21 @@ public class EazyNickAddon extends JavaPlugin implements Listener {
                 if (eazyNick.isEnabled()
                         && utils.getNickedPlayers().containsKey(player.getUniqueId())
                         && player.isOnline()
-                        && !utils.getWorldsWithDisabledActionBar().contains(player.getWorld().getName().toUpperCase()))
+                        && !utils.getWorldsWithDisabledActionBar().contains(player.getWorld().getName().toUpperCase())) {
                     actionBarUtils.sendActionBar(
                             player,
                             player.getMetadata("vanished").stream().anyMatch(MetadataValue::asBoolean)
                                     ? setupConfiguration.getConfigString("Messages.NickedAndVanished")
                                     : setupConfiguration.getConfigString("Messages.Nicked")
                     );
-                else {
+                } else {
                     if (player.isOnline())
                         actionBarUtils.sendActionBar(player, "");
 
                     cancel();
                 }
             }
-        }, 1000L, 1000L).run();
+        }, 0L, 1000L).run();
     }
 
 }
